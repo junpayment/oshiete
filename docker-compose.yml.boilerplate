@@ -1,0 +1,14 @@
+version: "3.2"
+services:
+  web:
+    image: gcr.io/nohana-sandbox/oshiete
+    environment:
+      GOOGLE_PROJECT_ID:
+      ESA_API_KEY:
+      ESA_TEAM:
+      SLACK_SIGNING_SECRETE:
+      GIN_MODE:
+    build:
+      context: .
+    ports:
+      - 8080:8080
