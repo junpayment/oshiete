@@ -41,7 +41,7 @@ func (h *Oshiete) Do(c *gin.Context) {
 			c.Set(middlewares.KeyError, err)
 			return
 		}
-		c.Set(middlewares.KeyResponseText, "教えてくれてありがとうございます！")
+		c.Set(middlewares.KeyResponseText, textBody.Body1+" は "+textBody.Body2+"\nなんですね！教えてくれてありがとうございます！")
 		return
 	} else if textBody.Command == models.CommandEte {
 		answer, err := h.OshieteService.Ete(textBody.Body1)

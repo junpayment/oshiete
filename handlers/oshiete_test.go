@@ -42,7 +42,7 @@ func TestOshiete_Do(t *testing.T) {
 		assert.False(t, exists)
 		resText, exists := c.Get(middlewares.KeyResponseText)
 		assert.True(t, exists)
-		assert.Equal(t, "教えてくれてありがとうございます！", resText)
+		assert.Equal(t, "test_key_string は test_answer_string\nなんですね！教えてくれてありがとうございます！", resText)
 	})
 
 	t.Run("command ete", func(t *testing.T) {
