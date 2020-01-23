@@ -17,13 +17,30 @@ func (s *Templete) OutEte(answer *models.EteAnswer) (string, error) {
 {{ .Answer }}
 {{ $length := len .EsaAnswer.List }}{{ if gt $length 0 }}
 esa検索結果
-{{ range $i, $v := .EsaAnswer.List }}
+{{ $list := trimslice .EsaAnswer.List 3 }}
+{{ range $i, $v := $list }}
 {{ $v.Name }}
 {{ $v.URL }}
 {{ end }}
 {{ end }}
 `
 	tmp := template.New("answer")
+	tmp.Funcs(template.FuncMap{
+		"trimslice": func(s []*struct {
+			Name        string
+			Description string
+			URL         string
+		}, end int) []*struct {
+			Name        string
+			Description string
+			URL         string
+		} {
+			if len(s) < end {
+				return s
+			}
+			return s[:end]
+		},
+	})
 	tmp, err := tmp.Parse(letter)
 	if err != nil {
 		return "", fmt.Errorf(`tmp, err := tmp.Parse(letter): %w`, err)
