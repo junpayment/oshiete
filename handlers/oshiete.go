@@ -13,17 +13,13 @@ type OshieteService interface {
 	Ete(key string) (*models.EteAnswer, error)
 }
 
-type TemplateService interface {
-	OutEte(answer *models.EteAnswer) (string, error)
-}
-
 type Oshiete struct {
 	OshieteService  OshieteService
 	TempleteService TemplateService
 }
 
 func (h *Oshiete) Do(c *gin.Context) {
-	body := &models.SlackSlashCommandRequest{}
+	body := &models.SlackSlashCommandRequestOshi{}
 	err := c.ShouldBind(body)
 	if err != nil {
 		c.Set(middlewares.KeyError, err)

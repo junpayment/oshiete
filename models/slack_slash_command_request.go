@@ -6,8 +6,9 @@ import (
 )
 
 const (
-	CommandEte = "ete"
-	CommandEru = "eru"
+	CommandEte       = "ete"
+	CommandEru       = "eru"
+	CommandIrukaList = "list"
 )
 
 // see https://github.com/gin-gonic/gin#bind-query-string-or-post-data
@@ -30,7 +31,9 @@ type SlackSlashCommandText struct {
 	Body2   string
 }
 
-func (s *SlackSlashCommandRequest) ParseText() (*SlackSlashCommandText, error) {
+type SlackSlashCommandRequestOshi SlackSlashCommandRequest
+
+func (s *SlackSlashCommandRequestOshi) ParseText() (*SlackSlashCommandText, error) {
 	temp := strings.Split(s.Text, " ")
 	if len(temp) < 2 {
 		return nil, fmt.Errorf("not enough command num")
@@ -48,5 +51,21 @@ func (s *SlackSlashCommandRequest) ParseText() (*SlackSlashCommandText, error) {
 		Command: command,
 		Body1:   body1,
 		Body2:   body2,
+	}, nil
+}
+
+type SlackSlashCommandRequestIruka SlackSlashCommandRequest
+
+func (s *SlackSlashCommandRequestIruka) ParseText() (*SlackSlashCommandText, error) {
+	temp := strings.Split(s.Text, " ")
+	if len(temp) < 1 {
+		return nil, fmt.Errorf("not enough command num")
+	}
+	command := temp[0]
+	if command != CommandIrukaList {
+		return nil, fmt.Errorf("invalid command: %s", command)
+	}
+	return &SlackSlashCommandText{
+		Command: command,
 	}, nil
 }

@@ -1,6 +1,7 @@
 package services
 
 import (
+	"github.com/junpayment/oshiete/models/iruka"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -58,6 +59,22 @@ func TestTemplete_OutEte(t *testing.T) {
 			},
 		}
 		res, err := service.OutEte(a)
+		assert.Nil(t, err)
+		assert.NotEmpty(t, res)
+	})
+}
+
+func TestTemplete_OutIruka(t *testing.T) {
+	t.Run("normal", func(t *testing.T) {
+		service := &Templete{}
+		states := []*iruka.State{
+			{
+				Name:    "test",
+				Status:  "test",
+				Message: "test",
+			},
+		}
+		res, err := service.OutIruka(states)
 		assert.Nil(t, err)
 		assert.NotEmpty(t, res)
 	})

@@ -3,6 +3,7 @@ package services
 import (
 	"bytes"
 	"fmt"
+	"github.com/junpayment/oshiete/models/iruka"
 	"io/ioutil"
 	"text/template"
 
@@ -47,6 +48,30 @@ esa検索結果
 	}
 	w := &bytes.Buffer{}
 	err = tmp.Execute(w, answer)
+	if err != nil {
+		return "", fmt.Errorf(`err := tmp.Execute(&buf, answer): %w`, err)
+	}
+	buf, err := ioutil.ReadAll(w)
+	if err != nil {
+		return "", fmt.Errorf(`buf, err := ioutil.ReadAll(w): %w`, err)
+	}
+	return string(buf), nil
+}
+
+func (s *Templete) OutIruka(states []*iruka.State) (string, error) {
+	letter := `
+在席状況です！
+{{ range $i, $v := . }}
+:{{ $v.Name }}: : {{ $v.Status }} : {{ $v.Message }}
+{{ end }}
+`
+	tmp := template.New("answer")
+	tmp, err := tmp.Parse(letter)
+	if err != nil {
+		return "", fmt.Errorf(`tmp, err := tmp.Parse(letter): %w`, err)
+	}
+	w := &bytes.Buffer{}
+	err = tmp.Execute(w, states)
 	if err != nil {
 		return "", fmt.Errorf(`err := tmp.Execute(&buf, answer): %w`, err)
 	}

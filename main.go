@@ -17,6 +17,8 @@ const (
 	GoogleProjectId = "GOOGLE_PROJECT_ID"
 	EsaApiKey       = "ESA_API_KEY"
 	EsaTeam         = "ESA_TEAM"
+	IrucaRoomId     = "IRUCA_ROOM_ID"
+	IrucaToken      = "IRUCA_TOKEN"
 	GinMode         = "GIN_MODE"
 )
 
@@ -40,10 +42,18 @@ func main() {
 		TempleteService: &services.Templete{},
 	}
 
+	irukaHandler := &handlers.IrukaHandler{
+		IrukaService: &services.IrukaService{
+			IrucaClient: infrastructures.NewIrucaClient(os.Getenv(IrucaRoomId), os.Getenv(IrucaToken)),
+		},
+		TemplateService: &services.Templete{},
+	}
+
 	r := gin.Default()
 	r.Use(middlewares.Auth)
 	r.Use(middlewares.Response)
 	r.POST("", oshieteHandler.Do)
+	r.POST("/iruka", irukaHandler.Do)
 
 	err = r.Run(":8080")
 	if err != nil {
